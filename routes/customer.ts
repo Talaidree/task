@@ -1,8 +1,9 @@
 import { NextFunction, Router } from "express";
 import { Request, Response, Express } from "express";
-import { createCustomer, removeCustomer, getSingleCustomer } from "../controllers/customerController.js";
+import { createCustomer, removeCustomer, getSingleCustomer ,updateCustomer} from "../controllers/customerController.js";
 import{getAllCustomer}from "../controllers/customerController.js"
 import { logRequestMiddleware } from "../Middleware/printlnfoMiddleware.js";
+import { Customer } from "../db/entities/Customer.js";
 
 
 const router = Router()
@@ -55,9 +56,23 @@ catch (error){
 
 })
 
+router.put("/:id", async (req:Request, res:Response, next:NextFunction)=>{
 
+    const id =Number (req.params.id);
+    const payload :Customer = req.body;
 
+    try {
+        const customer = await updateCustomer(id, payload)
 
+        res.json({
+            messege:"customer edited successfully",
+            success: true
+        })
+    } catch (error) {
+        console.log("Error" + error);
+        next(error)
+    }
+}) 
 
 router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
     const id = Number(req.params.id);

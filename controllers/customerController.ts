@@ -52,6 +52,29 @@ return customer
 
     return customer.remove();
 };
+const updateCustomer = async (id:number, payload:Customer)=>{
+    const customer = await Customer.findOne({ where:{id:id }})
+
+    if(!customer){
+        throw new AppError("customer not found ", 404, true)
+    }
+
+    if(payload.name){
+        customer.name = payload.name
+    }
+
+    if(payload.mobilePhone){
+        customer.mobilePhone = payload.mobilePhone
+    }
+
+    if(payload.balance){
+        customer.balance = payload.balance
+    }
 
 
- export{createCustomer,getAllCustomer,getSingleCustomer,removeCustomer}
+
+    return customer.save()
+    
+}
+
+ export{createCustomer,getAllCustomer,getSingleCustomer,removeCustomer,updateCustomer}
